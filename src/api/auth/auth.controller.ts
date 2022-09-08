@@ -1,7 +1,15 @@
 import { Controller, Request, UseGuards, Post, HttpCode } from '@nestjs/common';
 import { Local } from './guards/local';
 import { AuthService } from './auth.service';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('api')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -10,7 +18,6 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(Local)
   async login(@Request() req) {
-    console.log('Hello');
     return this.authService.signJwt(req.user);
   }
 }
