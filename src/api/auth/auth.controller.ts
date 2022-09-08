@@ -1,7 +1,6 @@
-import { Controller, Request, UseGuards, Post, HttpCode } from "@nestjs/common";
-import { Local } from "./guards/local";
-import { AuthService } from "./auth.service";
-
+import { Controller, Request, UseGuards, Post, HttpCode } from '@nestjs/common';
+import { Local } from './guards/local';
+import { AuthService } from './auth.service';
 
 @Controller('api')
 export class AuthController {
@@ -10,8 +9,8 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @UseGuards(Local)
-  async login(@Request() req){
+  async login(@Request() req) {
+    console.log('Hello');
     return this.authService.signJwt(req.user);
   }
-
 }

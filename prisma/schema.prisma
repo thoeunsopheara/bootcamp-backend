@@ -11,11 +11,29 @@ datasource db {
 }
 
 model User {
-    id Int @id @default(autoincrement())
-    name String
-    email String @unique
-    password String
-    role Int
+    id        Int @id @default(autoincrement())
+    name      String
+    email     String @unique
+    password  String
+    role      Int
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt @default(now())
+}
+
+model Product {
+    id          String @id @default(uuid())
+    name        String
+    price       Float
+    description String
+    image       String
+    category Category? @relation(fields: [categoryId], references: [id])
+    categoryId  String?
+}
+
+model Category {
+    id          String @id @default(uuid())
+    name        String @unique
+    description String
+    image       String
+    products Product[]
 }

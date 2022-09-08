@@ -1,32 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from "@nestjs/jwt";
-import { UsersService } from "@users/users.service";
-import { ConfigService } from "@nestjs/config";
+import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from '@src/prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private prismaService: PrismaService,
     private jwtService: JwtService,
-    private configService: ConfigService
+    private configService: ConfigService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
-    // const user = await this.usersService.findOne(email);
-    // if(user && user.password === password){
-    //   const { password, ...result } = user;
-    //   return result
-    // }
+    const data = await this.prismaService.user.findUnique({
+      where: { email: email },
+    });
+    if (data && bcrypt.compare(data.password, password)) return data;
     return null;
   }
 
-  async signJwt(user: any){
+  async signJwt(user: any) {
     return {
       token: this.jwtService.sign(user, {
         expiresIn: '30d',
-        secret: this.configService.get('JWT_SECRET') || 'secret'
-      })
-    }
+        secret: this.configService.get('JWT_SECRET') || 'secret',
+      }),
+    };
   }
-
 }
