@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserEntity } from "@users/entities/user.entity";
-import { PrismaService } from "@src/prisma/prisma.service";
-import * as bcrypt from "bcrypt";
+import { UserEntity } from '@users/entities/user.entity';
+import { PrismaService } from '@src/prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
   async create(user: CreateUserDto): Promise<UserEntity> {
-    user.password = await this.hashPassword(user.password);
+    user.password = await bcrypt.hash(user.password, 10);
     return await this.prismaService.user.create({ data: user });
   }
 
@@ -20,8 +20,8 @@ export class UsersService {
         id: true,
         name: true,
         email: true,
-        role: true
-      }
+        role: true,
+      },
     });
   }
 
@@ -32,28 +32,27 @@ export class UsersService {
         id: true,
         name: true,
         email: true,
-        role: true
-      }
+        role: true,
+      },
     });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     return await this.prismaService.user.update({
       where: {
-        id: Number(id)
+        id: Number(id),
       },
-      data: updateUserDto
+      data: updateUserDto,
     });
   }
 
   async remove(id: number) {
     return await this.prismaService.user.delete({
       where: {
-        id: Number(id)
-      }
+        id: Number(id),
+      },
     });
   }
-
 
   async hashPassword(password: string): Promise<string> {
     const round = 10;

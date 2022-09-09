@@ -1,14 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiResponse,
-  ApiTags
-} from "@nestjs/swagger";
+  ApiTags,
+} from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { CreateUserDto } from "@users/dto/create-user.dto";
-import { UpdateUserDto } from "@users/dto/update-user.dto";
-import { UserEntity } from "@users/entities/user.entity";
+import { CreateUserDto } from '@users/dto/create-user.dto';
+import { UpdateUserDto } from '@users/dto/update-user.dto';
+import { UserEntity } from '@users/entities/user.entity';
 
 @ApiTags('Users')
 @Controller('api/users')
